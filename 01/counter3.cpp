@@ -69,6 +69,9 @@ class MeanCounter : public MeanCounterBase {
 public:
     double mean() override {
         std::unique_lock<std::mutex> ulock(mutex);
+        while (inactive_writers) { // has inactive writer
+            read_cond_var2.wait(ulock);
+        }
 
         // start read
         active_readers++;
@@ -92,12 +95,15 @@ public:
     }
 
     void add(int value) override {
-        std::unique_lock<std::mutex> ulock(mutex);
+        std::unique_lock<std::mutex> ulock2(mutex2);
+        inactive_writers++;
+
+        while (position != 2) { // has active writer
+            write_cond_var.wait(ulock2);
+        }
 
         // start write
-        while (position != 2) { // has active readers o active writer
-            write_cond_var.wait(ulock);
-        }
+        std::unique_lock<std::mutex> ulock(mutex);
         position = 0; // activate writer
         ulock.unlock();
 
@@ -105,6 +111,8 @@ public:
 
         // finish write
         ulock.lock();
+        inactive_writers--;
+        read_cond_var2.notify_all();
         position = 2; // deactivate writer
         if (active_readers) {
             read_cond_var.notify_all();
@@ -116,13 +124,15 @@ public:
 
 private:
     std::mutex mutex;
+    std::mutex mutex2;
 
     std::condition_variable read_cond_var;
+    std::condition_variable read_cond_var2;
     std::condition_variable write_cond_var;
 
     std::atomic<int> active_readers{0};
     std::atomic<int> position{2};
-    std::atomic<int> inactive_writer{0};
+    std::atomic<int> inactive_writers{0};
 };
 
 //// Your solution above

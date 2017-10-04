@@ -1,0 +1,43 @@
+\documentclass[12pt,a4paper]{report}
+
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage[OT1]{fontenc}
+
+\usepackage{xcolor}
+\definecolor{white-smoke}{HTML}{F5F5F5}
+
+\usepackage{listings}
+\lstset{
+  basicstyle=\ttfamily,
+  backgroundcolor=\color{white-smoke},
+  showstringspaces=false,
+  commentstyle=\color{red},
+  keywordstyle=\color{blue},
+  xleftmargin=0.5cm,frame=tlbr,framesep=4pt,framerule=0pt
+}
+
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+
+\author{Старченко Владимир}
+\title{Параллельные и распределенные вычисления. Задание 1 ``Читатели-писатели''.}
+\date{}
+
+
+\begin{document}
+\maketitle
+\section*{Вопрос 1.}
+
+{\bf Измерьте время выполнения исходной и модифицированной программ на файле trace.txt. Как изменилось время выполнения? Почему? От каких факторов зависит то, насколько лучше работает модифицированная версия в сравнении с исходной? (вес 0.3)}
+
+\section*{Вопрос 2.}
+
+{\bf Предположим, что в момент окончания работы со счетчиком потока-писателя доступа ожидают как писатели, так читатели. Кого следует «разбудить» в первую очередь? Почему? Можно ли это подтвердить экспериментально? (вес 0.35)}
+
+\section*{Вопрос 3.}
+
+{\bf Могут ли в предложенной вами реализации некоторые потоки бесконечно ожидать доступа к счетчику? Почему? Если да, то как можно устранить эту проблему? (вес 0.35)}
+
+
+
+\end{document}
