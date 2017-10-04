@@ -12,15 +12,14 @@ void sleep(unsigned milliseconds) {
 
 class MeanCounterBase {
 public:
-    virtual ~MeanCounterBase() {
-    }
+    virtual ~MeanCounterBase() { }
 
     virtual double mean() = 0;
     virtual void add(int value) = 0;
 
     bool check(double expectedMean) const {
         return std::abs(expectedMean - calcMean()) <
-               std::numeric_limits<double>::epsilon();
+            std::numeric_limits<double>::epsilon();
     }
 
 protected:
@@ -60,81 +59,22 @@ bool check(MeanCounterBase& counter) {
 // === DO NOT REMOVE THIS LINE ===
 //// Your solution below
 
-#include <atomic>
-#include <condition_variable>
 #include <mutex>
-#include <thread>
 
 class MeanCounter : public MeanCounterBase {
 public:
     double mean() override {
-        std::unique_lock<std::mutex> ulock2(mutex2);
-        while (inactive_writers) { // has inactive writer
-            read_cond_var2.wait(ulock2);
-        }
-        ulock2.unlock();
-
-        std::unique_lock<std::mutex> ulock(mutex);
-
-        // start read
-        active_readers++;
-        while (position == 0) { // has active writer
-            read_cond_var.wait(ulock);
-        }
-        position = 1; // activate reader
-        ulock.unlock();
-
-        auto res = calcMean();
-
-        // finish read
-        ulock.lock();
-        active_readers--;
-        if (active_readers == 0) {
-            position = 2; // deactivate reader
-            write_cond_var.notify_one();
-        }
-        ulock.unlock();
-
-        return res;
+        std::lock_guard<std::mutex> lock(mutex);
+        return calcMean();
     }
 
     void add(int value) override {
-        std::unique_lock<std::mutex> ulock2(mutex2);
-        inactive_writers++;
-
-        while (position != 2) { // has active writer
-            write_cond_var.wait(ulock2);
-        }
-
-        // start write
-        std::unique_lock<std::mutex> ulock(mutex);
-        position = 0; // activate writer
-
+        std::lock_guard<std::mutex> lock(mutex);
         doAdd(value);
-
-        // finish write
-        inactive_writers--;
-        read_cond_var2.notify_all();
-        position = 2; // deactivate writer
-        if (active_readers) {
-            read_cond_var.notify_all();
-        } else {
-            write_cond_var.notify_one();
-        }
-        ulock.unlock();
     }
 
 private:
     std::mutex mutex;
-    std::mutex mutex2;
-
-    std::condition_variable read_cond_var;
-    std::condition_variable read_cond_var2;
-    std::condition_variable write_cond_var;
-
-    std::atomic<int> active_readers{0};
-    std::atomic<int> position{2};
-    std::atomic<int> inactive_writers{0};
 };
 
 //// Your solution above
@@ -142,7 +82,7 @@ private:
 
 int main(int argc, char* argv[]) {
     if (argc != 2) {
-        std::fprintf(stderr, "Usage: %position trace_file\n", argv[0]);
+        std::fprintf(stderr, "Usage: %s trace_file\n", argv[0]);
         return 1;
     }
 
@@ -151,7 +91,7 @@ int main(int argc, char* argv[]) {
 
     std::ifstream f(argv[1]);
     int thread_id = 0;
-    while (f) {
+    while(f) {
         std::string op;
         f >> op;
         if (op == "W") {
@@ -161,7 +101,7 @@ int main(int argc, char* argv[]) {
         } else if (op == "R") {
             threads.emplace_back(reader, thread_id, std::ref(counter));
         } else if (!op.empty()) {
-            std::fprintf(stderr, "Unknown op: %position\n", op.c_str());
+            std::fprintf(stderr, "Unknown op: %s\n", op.c_str());
             break;
         }
         thread_id++;

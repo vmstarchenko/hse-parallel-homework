@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.9.25)  4 OCT 2017 08:47
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.9.25)  4 OCT 2017 11:58
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -717,25 +717,32 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <7> on input line 28.
 [1
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [1] (./report.aux) ) 
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
+Overfull \hbox (19.40234pt too wide) in paragraph at lines 51--52
+\T2A/cmr/m/n/12 https://everest.distcomp.org/jobs/59d49033300000ab511408c6?jobI
+d=59d4821a3000000350140862 
+ []
+
+[1] [2] [3] (./report.aux) ) 
 Here is how much of TeX's memory you used:
- 4690 strings out of 494440
- 58683 string characters out of 6173198
- 129672 words of memory out of 5000000
- 7968 multiletter control sequences out of 15000+600000
- 9711 words of font info for 24 fonts, out of 8000000 for 9000
+ 4694 strings out of 494440
+ 58731 string characters out of 6173198
+ 133672 words of memory out of 5000000
+ 7970 multiletter control sequences out of 15000+600000
+ 11399 words of font info for 26 fonts, out of 8000000 for 9000
  430 hyphenation exceptions out of 8191
- 26i,6n,35p,508b,219s stack positions out of 5000i,500n,10000p,200000b,80000s
- </hom
-e/vladimir/.texmf-var/fonts/pk/ljfour/lh/lh-t2a/larm1200.600pk> </home/vladimir
-/.texmf-var/fonts/pk/ljfour/lh/lh-t2a/labx1200.600pk> </home/vladimir/.texmf-va
-r/fonts/pk/ljfour/lh/lh-t2a/labx1728.600pk> </home/vladimir/.texmf-var/fonts/pk
-/ljfour/lh/lh-t2a/larm1440.600pk> </home/vladimir/.texmf-var/fonts/pk/ljfour/lh
-/lh-t2a/larm2074.600pk>
-Output written on report.pdf (2 pages, 33673 bytes).
+ 26i,6n,35p,1495b,219s stack positions out of 5000i,500n,10000p,200000b,80000s
+ </home/vladimir/.texmf-var/fonts/pk/ljfour/lh/lh-t
+2a/lati1200.600pk> </home/vladimir/.texmf-var/fonts/pk/ljfour/lh/lh-t2a/labx120
+0.600pk> </home/vladimir/.texmf-var/fonts/pk/ljfour/lh/lh-t2a/larm1200.600pk> <
+/home/vladimir/.texmf-var/fonts/pk/ljfour/lh/lh-t2a/labx1440.600pk> </home/vlad
+imir/.texmf-var/fonts/pk/ljfour/lh/lh-t2a/labx1728.600pk> </home/vladimir/.texm
+f-var/fonts/pk/ljfour/lh/lh-t2a/larm1440.600pk> </home/vladimir/.texmf-var/font
+s/pk/ljfour/lh/lh-t2a/larm2074.600pk>
+Output written on report.pdf (4 pages, 83449 bytes).
 PDF statistics:
- 131 PDF objects out of 1000 (max. 8388607)
- 26 compressed objects within 1 object stream
+ 284 PDF objects out of 1000 (max. 8388607)
+ 38 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
