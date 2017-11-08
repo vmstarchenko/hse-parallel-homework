@@ -1,0 +1,33 @@
+Dataset 1 (d=2, N=1000000, K=30):
+p =  1 	 t = 41.57 	 S =  0.98 	 E =  0.98 	 SameResult = True
+p =  2 	 t = 22.06 	 S =  1.84 	 E =  0.92 	 SameResult = True
+p =  4 	 t = 12.38 	 S =  3.28 	 E =  0.82 	 SameResult = True
+p =  8 	 t =  7.69 	 S =  5.28 	 E =  0.66 	 SameResult = True
+p = 12 	 t =  6.13 	 S =  6.63 	 E =  0.55 	 SameResult = True
+p = 13 	 t =  7.82 	 S =  5.19 	 E =  0.40 	 SameResult = True
+p = 16 	 t =  6.98 	 S =  5.82 	 E =  0.36 	 SameResult = True
+p = 20 	 t =  6.22 	 S =  6.53 	 E =  0.33 	 SameResult = True
+p = 24 	 t =  5.69 	 S =  7.14 	 E =  0.30 	 SameResult = True
+PERFORMANCE IS POOR
+
+Dataset 2 (d=2, N=200000, K=100):
+p =  2 	 t = 17.90 	 S =  1.90 	 E =  0.95 	 SameResult = True
+p =  4 	 t =  9.53 	 S =  3.57 	 E =  0.89 	 SameResult = True
+p =  8 	 t =  5.45 	 S =  6.24 	 E =  0.78 	 SameResult = True
+p = 12 	 t =  3.91 	 S =  8.70 	 E =  0.72 	 SameResult = True
+p = 13 	 t =  5.71 	 S =  5.95 	 E =  0.46 	 SameResult = True
+p = 16 	 t =  5.00 	 S =  6.80 	 E =  0.42 	 SameResult = True
+p = 20 	 t =  4.35 	 S =  7.82 	 E =  0.39 	 SameResult = True
+p = 24 	 t =  3.76 	 S =  9.04 	 E =  0.38 	 SameResult = True
+PERFORMANCE IS AVERAGE
+
+Dataset 3 (d=2, N=80000, K=1000):
+p =  2 	 t = 17.92 	 S =  1.95 	 E =  0.98 	 SameResult = True
+p =  4 	 t =  9.04 	 S =  3.87 	 E =  0.97 	 SameResult = True
+p =  8 	 t =  4.66 	 S =  7.51 	 E =  0.94 	 SameResult = True
+p = 12 	 t =  3.15 	 S = 11.11 	 E =  0.93 	 SameResult = True
+p = 13 	 t =  5.41 	 S =  6.47 	 E =  0.50 	 SameResult = True
+p = 16 	 t =  4.46 	 S =  7.85 	 E =  0.49 	 SameResult = True
+p = 20 	 t =  3.55 	 S =  9.86 	 E =  0.49 	 SameResult = True
+p = 24 	 t =  2.97 	 S = 11.78 	 E =  0.49 	 SameResult = True
+PERFORMANCE IS GOOD

@@ -69,6 +69,7 @@ class MeanCounter : public MeanCounterBase {
 public:
     double mean() override {
         std::unique_lock<std::mutex> ulock2(mutex2);
+
         while (inactive_writers) { // has inactive writer
             read_cond_var2.wait(ulock2);
         }
