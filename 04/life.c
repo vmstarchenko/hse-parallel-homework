@@ -5,14 +5,21 @@
 #include <string.h>
 #include <unistd.h>
 
+int DEBUG = 0;
+#define printf                                                                 \
+    if (DEBUG)                                                                 \
+    printf
+
 #define ALIVE 'X'
 #define DEAD '.'
+#define master 0
 
 int toindex(int row, int col, int N);
 void printgrid(char* grid, FILE* f, int N);
 char* read_data(char* filename, int N, int size, int width, int rank);
 void write_data(char* filename, int N, int size, int width, int rank,
                 char* grid);
+void recalc_row(int i, int N, char* grid, char* buf);
 
 int main(int argc, char* argv[]) {
     // parse args
@@ -36,9 +43,14 @@ int main(int argc, char* argv[]) {
     int me = rank;
 
     int width = (N / size);
-    if (N % size) {
+    if (N % size)
         ++width;
-    }
+
+    int real_width = width;
+    if (rank == size - 1)
+        real_width = N - width * (size - 1);
+
+    printf("r%d rw%d\n", rank, real_width);
 
     int down = (me + 1) % size;
     int up = (me + size - 1) % size;
@@ -51,63 +63,54 @@ int main(int argc, char* argv[]) {
 
         MPI_Request send_request_up, recv_request_up, send_request_down,
             recv_request_down;
-        /* Send up unless I'm at the top, then receive from below */
+        /* Send up */
         MPI_Isend(grid + 1 * N, N, MPI_CHAR, (rank + size - 1) % size, 1,
                   MPI_COMM_WORLD, &send_request_up);
-        MPI_Irecv(grid + width * N + 1, N, MPI_CHAR, (rank + 1) % size, 1,
-                  MPI_COMM_WORLD, &recv_request_up);
+        MPI_Irecv(grid + (real_width + 1) * N, N, MPI_CHAR, (rank + 1) % size,
+                  1, MPI_COMM_WORLD, &recv_request_up);
 
-        /* Send down unless I'm at the bottom */
-        MPI_Isend(grid + width * N, N, MPI_CHAR, (rank + 1) % size, 0,
+        /* Send down */
+        printf("r%d sr%d %c\n", rank, (rank + 1) % size,
+               (grid + real_width * N)[0]);
+        MPI_Isend(grid + real_width * N, N, MPI_CHAR, (rank + 1) % size, 0,
                   MPI_COMM_WORLD, &send_request_down);
         MPI_Irecv(grid, N, MPI_CHAR, (rank + size - 1) % size, 0,
                   MPI_COMM_WORLD, &recv_request_down);
+
+        if (DEBUG) {
+            MPI_Barrier(MPI_COMM_WORLD);
+            for (int i = 0; i < size; i++) {
+                if (i == rank) {
+                    printf("kek r%d [%11.11s]\n", rank, grid);
+                    fflush(stdout);
+                }
+                MPI_Barrier(MPI_COMM_WORLD);
+            }
+            MPI_Barrier(MPI_COMM_WORLD);
+        }
+
+        // exchange first and last
+
+        // recalc field
+        for (int i = 2; i < real_width; ++i) { // row
+            recalc_row(i, N, grid, buf);
+        }
 
         MPI_Wait(&recv_request_up, &status);
         MPI_Wait(&send_request_up, &status);
         MPI_Wait(&recv_request_down, &status);
         MPI_Wait(&send_request_down, &status);
 
-        MPI_Barrier(MPI_COMM_WORLD);
-        for (int i = 0; i < size; i++) {
-            if (i == rank) {
-                printf("r%d %*s\n", rank, grid, (width + 2) * N );
-                fflush(stdout);
-            }
-            MPI_Barrier(MPI_COMM_WORLD);
+        recalc_row(1, N, grid, buf);
+        if (real_width > 1) {
+          recalc_row(real_width, N, grid, buf);
         }
-        MPI_Barrier(MPI_COMM_WORLD);
 
-        // exchange first and last
-
-        // recalc field
-        for (int i = 1; i < width + 1; ++i) { // row
-            for (int j = 0; j < N; ++j) {     // column
-                int alive_count = 0;          // count alive
-                for (int di = -1; di <= 1; ++di) {
-                    for (int dj = -1; dj <= 1; ++dj) {
-                        if ((di != 0 || dj != 0) &&
-                            grid[toindex(i + di, j + dj, N)] == ALIVE) {
-                            ++alive_count;
-                        }
-                    }
-                }
-
-                int current = i * N + j;
-                if (alive_count == 3 ||
-                    (alive_count == 2 && grid[current] == ALIVE)) {
-                    buf[current] = ALIVE;
-                } else {
-                    buf[current] = DEAD;
-                }
-            }
-        }
         char* tmp = grid;
         grid = buf;
         buf = tmp;
     }
 
-    printf("kek\n");
     write_data(argv[4], N, size, width, rank, grid);
 
     free(grid);
@@ -132,8 +135,8 @@ void write_data(char* filename, int N, int size, int width, int rank,
 
     if (rank == 0) {
         FILE* output = fopen(filename, "w");
-        printf("r%d %100s\n", me, common_grid);
-        printgrid(grid, output, N);
+        printf("r%d write [%100s]\n", rank, common_grid);
+        printgrid(common_grid, output, N);
         fclose(output);
         free(common_grid);
     }
@@ -144,7 +147,7 @@ char* read_data(char* filename, int N, int size, int width, int rank) {
 
     // read data
     char* common_grid;
-    if (rank == 0) {
+    if (rank == master) {
         common_grid = (char*)calloc(width * N * size, sizeof(*common_grid));
 
         FILE* input = fopen(filename, "r");
@@ -152,11 +155,27 @@ char* read_data(char* filename, int N, int size, int width, int rank) {
             fscanf(input, "%s", common_grid + i * N);
         }
         fclose(input);
-    }
-    MPI_Scatter(common_grid, width * N, MPI_CHAR, grid + N, width * N, MPI_CHAR,
-                0, MPI_COMM_WORLD);
 
-    if (rank == 0) {
+        printf("r%d read [%*.*s]\n", rank, N * N, N * N, common_grid);
+    }
+
+    MPI_Scatter(common_grid, width * N, MPI_CHAR, grid + N, width * N, MPI_CHAR,
+                master, MPI_COMM_WORLD);
+
+    if (DEBUG) {
+        MPI_Barrier(MPI_COMM_WORLD);
+        for (int i = 0; i < size; i++) {
+            if (i == rank) {
+                printf("kek r%d [%*.*s]\n", rank, width * N, width * N,
+                       grid + N);
+                fflush(stdout);
+            }
+            MPI_Barrier(MPI_COMM_WORLD);
+        }
+        MPI_Barrier(MPI_COMM_WORLD);
+    }
+
+    if (rank == master) {
         free(common_grid);
     }
 
@@ -185,4 +204,25 @@ int toindex(int row, int col, int N) {
         col = col - N;
     }
     return row * N + col;
+}
+
+void recalc_row(int i, int N, char* grid, char* buf) {
+    for (int j = 0; j < N; ++j) { // column
+        int alive_count = 0;      // count alive
+        for (int di = -1; di <= 1; ++di) {
+            for (int dj = -1; dj <= 1; ++dj) {
+                if ((di != 0 || dj != 0) &&
+                    grid[toindex(i + di, j + dj, N)] == ALIVE) {
+                    ++alive_count;
+                }
+            }
+        }
+
+        int current = i * N + j;
+        if (alive_count == 3 || (alive_count == 2 && grid[current] == ALIVE)) {
+            buf[current] = ALIVE;
+        } else {
+            buf[current] = DEAD;
+        }
+    }
 }

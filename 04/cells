@@ -1,0 +1,20 @@
+    int width = sqrt(size);
+    int height = width;
+
+    int me = rank;
+    int row = me / width;
+    int column = me % width;
+
+    int right = me + (column + 1) % width - column;
+    int left = me + (column + width - 1) % width - column;
+    int down = (me + width) % size;
+    int up = (me + size - width) % size;
+
+    int h_start = column * N / width;
+    int h_end = (column + 1) * N / width;
+    int v_start = row * N / height;
+    int v_end = (row + 1) * N / height;
+
+    int c_width = h_end - h_start;
+    int c_height = v_end - v_start;
+    int g_size = (h_end - h_start) * (v_end - v_start);

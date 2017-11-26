@@ -7,8 +7,6 @@
 #include <cuda.h>
 
 static const int BLOCK_SIZE = 256;
-static const bool DEBUG = true;
-#define SHARED_BLOCK_SIZE 2
 
 double EPS = 0.001;
 
@@ -79,54 +77,9 @@ __global__ void mult_gpu(int N, int M, int K, double* m1, double* m2,
     }
 }
 
-__global__ void shared_mult_gpu(int N, int M, int K, double* m1, double* m2,
-                                double* res) {
-    int i = threadIdx.y;
-    int j = threadIdx.x;
-
-    int real_i = blockIdx.y * SHARED_BLOCK_SIZE + threadIdx.y;
-    int real_j = blockIdx.x * SHARED_BLOCK_SIZE + threadIdx.x;
-
-    int p = real_i * K + real_j;
-
-    if (real_i < N && real_j < K) {
-        printf("i%d j%d %d %d %d %d %d %d %d %d\n", i, j, real_i, real_j, p, N,
-               M, K);
-
-        double res_p = 0;
-
-        for (int m = 0; m < ceil(((double)M) / SHARED_BLOCK_SIZE); ++m) {
-            __shared__ double As[SHARED_BLOCK_SIZE][SHARED_BLOCK_SIZE];
-            __shared__ double Bs[SHARED_BLOCK_SIZE][SHARED_BLOCK_SIZE];
-
-            As[i][j] = m1[real_i * M + (SHARED_BLOCK_SIZE * m + threadIdx.x)];
-            Bs[i][j] = m2[K * (SHARED_BLOCK_SIZE * m + threadIdx.y) + real_j];
-
-            printf("%d %d i%d j%d k%d\n", m, p, i, j,
-                   real_i * M + (SHARED_BLOCK_SIZE * m + threadIdx.x));
-
-            __syncthreads();
-            // printf("As: %d %d %d %d\n", As[0][0], As[0][j]);
-            // printf("As: %d %d %d %d\n", );
-
-            for (int e = 0; e < SHARED_BLOCK_SIZE; ++e) {
-                if (real_i < N && real_j < M) {
-                    res_p += As[i][e] * Bs[e][j];
-                    printf("p %d i%d j%d %d %lf %lf %d %d\n", p, i, j, e,
-                           As[i][e], Bs[e][j], real_i, real_j);
-                }
-            }
-            printf("next m\n");
-        }
-
-        res[p] = res_p;
-    }
-}
+__global__ void MatMulKernel(int N, int M, int K, double* mNM_D, double* mMK_D, double* mNK_D);
 
 int main() {
-    if (DEBUG) {
-        printf("Warning: DEBUG == false");
-    }
     // int best_grid, best_block;
     // cudaOccupancyMaxPotentialBlockSize(&best_grid, &best_block,
     // transpose_gpu);
@@ -134,16 +87,16 @@ int main() {
     //        best_block);
     // return 0;
 
-    int N = 2; // 500;
-    int M = 4; // 510;
-    int K = 3; // 490;
+    int N = 800;
+    int M = 810;
+    int K = 820;
     int NM = N * M;
     int MK = M * K;
     int NK = N * K;
 
     struct timeval start, end;
     cudaEvent_t startT, endT;
-    int global_iters = 500;
+    int global_iters = 100;
     int iters = global_iters;
     double summ_time = 0;
     float cur_time = 0;
@@ -173,7 +126,7 @@ int main() {
     gettimeofday(&end, NULL);
     printf("gpu malloc and memcopy time: %lf\n", get_time_diff(start, end));
 
-    if (NM < 50 && DEBUG) {
+    if (NM < 50) {
         print_matrix(N, M, mNM_h);
         printf("\n");
         print_matrix(M, K, mMK_h);
@@ -184,8 +137,6 @@ int main() {
     // begin transpose_cpu
     summ_time = 0;
     iters = global_iters / 10;
-    if (DEBUG)
-        iters = 1;
     for (int i = 0; i < iters; ++i) {
         gettimeofday(&start, NULL);
         transpose_cpu(N, M, mNM_h, mMN_h);
@@ -205,9 +156,6 @@ int main() {
     summ_time = 0;
     cur_time = 0;
     iters = global_iters;
-    if (DEBUG)
-        iters = 1;
-
     for (int i = 0; i < iters; ++i) {
         cudaEventRecord(startT, str);
 
@@ -238,11 +186,9 @@ int main() {
     // begin mult_cpu
     summ_time = 0;
     iters = global_iters / 20;
-    if (DEBUG)
-        iters = 1;
     for (int i = 0; i < iters; ++i) {
         gettimeofday(&start, NULL);
-        mult_cpu(N, M, K, mNM_h, mMK_h, mNK_h);
+        mult_cpu(N, M, K, mMN_h, mMK_h, mNK_h);
         gettimeofday(&end, NULL);
         summ_time += get_time_diff(start, end);
         // printf("%lf\n", get_time_diff(start, end));
@@ -260,8 +206,6 @@ int main() {
     summ_time = 0;
     cur_time = 0;
     iters = global_iters / 5;
-    if (DEBUG)
-        iters = 1;
     for (int i = 0; i < iters; ++i) {
         cudaEventRecord(startT, str);
 
@@ -285,20 +229,10 @@ int main() {
     printf("mult speedup: %f\n", cpu_mult_time / gpu_mult_time);
     // end mult_gpu
 
-    // for (int i = 0; i < iters; ++i) {
-    //     cudaEventRecord(startT, str);
-
-    //     dim3 dimBlock(SHARED_BLOCK_SIZE, SHARED_BLOCK_SIZE);
-    //     dim3 dimGrid(ceil(((double)K) / dimBlock.x),
-    //                  ceil(((double)N) / dimBlock.y));
-    //     shared_mult_gpu<<<dimGrid, ceil((double)M / SHARED_BLOCK_SIZE)>>>(N, M, K, mNM_d, mMK_d, mNK_d);
-
-    //     cudaEventRecord(endT, str);
-    //     cudaEventSynchronize(endT);
-    //     cudaEventElapsedTime(&cur_time, startT, endT);
-
-    //     summ_time += ((double)cur_time) / 1000;
-    // }
+    /// Mult 2
+    dim3 dimBlock(BLOCK_SIZE, BLOCK_SIZE);
+    dim3 dimGrid(K / dimBlock.x, N / dimBlock.y);
+    MatMulKernel<<<dimGrid, dimBlock>>>(N, M, K, mMN_d, mMK_d, mNK_d);
 
     cudaFree(mNM_d);
     cudaFree(mMN_d);
@@ -307,6 +241,52 @@ int main() {
     free_matrix(mMK_h);
 
     return 0;
+}
+
+// Matrix multiplication kernel called by MatMul()
+__global__ void MatMulKernel(int N, int M, int K, double* mNM_D, double mMK_D, Matrix mNK_D) {
+    // Block row and column
+    int blockRow = blockIdx.y;
+    int blockCol = blockIdx.x;
+    // Each thread block computes one sub-matrix Csub of mNK_D
+    Matrix Csub = GetSubMatrix(mNK_D, blockRow, blockCol);
+
+        // Each thread computes one element of Csub
+        // by accumulating results into Cvalue
+        float Cvalue = 0;
+    // Thread row and column within Csub
+    int row = threadIdx.y;
+    int col = threadIdx.x;
+    // Loop over all the sub-matrices of mNM_D and mMK_D that are
+    // required to compute Csub
+    // Multiply each pair of sub-matrices together
+    // and accumulate the results
+    for (int m = 0; m < (mNM_D.width / BLOCK_SIZE); ++m) {
+        // Get sub-matrix Asub of mNM_D
+        Matrix Asub = GetSubMatrix(mNM_D, blockRow, m);
+        // Get sub-matrix Bsub of mMK_D
+        Matrix Bsub = GetSubMatrix(mMK_D, m, blockCol);
+        // Shared memory used to store Asub and Bsub respectively
+        __shared__ float As[BLOCK_SIZE][BLOCK_SIZE];
+        __shared__ float Bs[BLOCK_SIZE][BLOCK_SIZE];
+        // Load Asub and Bsub from device memory to shared memory
+        // Each thread loads one element of each sub-matrix
+        As[row][col] = GetElement(Asub, row, col);
+        Bs[row][col] = GetElement(Bsub, row, col);
+        // Synchronize to make sure the sub-matrices are loaded
+        // before starting the computation
+        __syncthreads();
+        // Multiply Asub and Bsub together
+        for (int e = 0; e < BLOCK_SIZE; ++e)
+            Cvalue += As[row][e] * Bs[e][col];
+        // Synchronize to make sure that the preceding
+        // computation is done before loading two new
+        // sub-matrices of mNM_D and mMK_D in the next iteration
+        __syncthreads();
+    }
+    // Write Csub to device memory
+    // Each thread writes one element
+    SetElement(Csub, row, col, Cvalue);
 }
 
 void print_matrix(int N, int M, double* matrix) {
