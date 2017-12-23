@@ -1,0 +1,79 @@
+5
+CoreSeconds: 10533
+Elapsed: 	17mins, 0sec
+AverageMapTime: 1mins, 0sec
+AverageShuffleTime: 20sec
+AverageMergeTime: 4sec
+AverageReduceTime: 12mins, 4sec
+
+10
+CoreSeconds: 10381
+Elapsed: 10mins, 52sec
+AverageMapTime: 1mins, 1sec
+AverageShuffleTime: 10sec
+AverageMergeTime: 7sec
+AverageReduceTime: 6mins, 5sec
+
+15
+CoreSeconds: 10451
+Elapsed: 	10mins, 15sec
+AverageMapTime: 1mins, 0sec
+AverageShuffleTime: 12sec
+AverageMergeTime: 4sec
+AverageReduceTime: 4mins, 13sec
+
+20
+CoreSeconds: 10256
+Elapsed: 6mins, 25sec
+AverageMapTime: 1mins, 1sec
+AverageShuffleTime: 10sec
+AverageMergeTime: 3sec
+AverageReduceTime: 3mins, 8sec
+
+25
+CoreSeconds: 10283
+Elapsed: 7mins, 11sec
+AverageMapTime: 1mins, 0sec
+AverageShuffleTime: 9sec
+AverageMergeTime: 3sec
+AverageReduceTime: 2mins, 30sec
+
+30
+CoreSeconds: 9974
+Elapsed: 5mins, 10sec
+AverageMapTime: 1mins, 0sec
+AverageShuffleTime: 13sec
+AverageMergeTime: 2sec
+AverageReduceTime: 1mins, 53sec
+
+35
+CoreSeconds: 10379
+Elapsed: 5mins, 27sec
+AverageMapTime: 1mins, 1sec
+AverageShuffleTime: 6sec
+AverageMergeTime: 2sec
+AverageReduceTime: 1mins, 51sec
+
+40
+CoreSeconds: 10175
+Elapsed: 4mins, 32sec
+AverageMapTime: 1mins, 2sec
+AverageShuffleTime: 4sec
+AverageMergeTime: 1sec
+AverageReduceTime: 1mins, 33sec
+
+45
+CoreSeconds: 9935
+Elapsed: 3mins, 36sec
+AverageMapTime: 1mins, 1sec
+AverageShuffleTime: 5sec
+AverageMergeTime: 1sec
+AverageReduceTime: 1mins, 20sec
+
+50
+CoreSeconds: 9395
+Elapsed: 2mins, 31sec
+AverageMapTime: 56sec
+AverageShuffleTime: 5sec
+AverageMergeTime: 1sec
+AverageReduceTime: 1mins, 10sec

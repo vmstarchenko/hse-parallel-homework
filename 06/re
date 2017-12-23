@@ -1,0 +1,214 @@
+r5
+CS: 8725
+Job Name: 	streamjob9215160346838798661.jar
+User Name: 	pdc
+Queue: 	root.pdc
+State: 	SUCCEEDED
+Uberized: 	false
+Submitted: 	Sat Dec 23 14:19:50 MSK 2017
+Started: 	Sat Dec 23 14:23:44 MSK 2017
+Finished: 	Sat Dec 23 14:40:59 MSK 2017
+Elapsed: 	17mins, 14sec
+Diagnostics: 	
+Average Map Time 	59sec
+Average Shuffle Time 	17sec
+Average Merge Time 	7sec
+Average Reduce Time 	12mins, 31sec 
+
+r10
+CS: 10381
+Job Name: 	streamjob8539637105320805980.jar
+User Name: 	pdc
+Queue: 	root.pdc
+State: 	SUCCEEDED
+Uberized: 	false
+Submitted: 	Sat Dec 23 14:33:45 MSK 2017
+Started: 	Sat Dec 23 14:36:17 MSK 2017
+Finished: 	Sat Dec 23 14:47:10 MSK 2017
+Elapsed: 	10mins, 52sec
+Diagnostics: 	
+Average Map Time 	1mins, 1sec
+Average Shuffle Time 	10sec
+Average Merge Time 	7sec
+Average Reduce Time 	6mins, 5sec 
+
+r15
+CS: 5058
+Job Name: 	streamjob8306051493748107849.jar
+User Name: 	pdc
+Queue: 	root.pdc
+State: 	SUCCEEDED
+Uberized: 	false
+Submitted: 	Sat Dec 23 14:12:20 MSK 2017
+Started: 	Sat Dec 23 14:16:47 MSK 2017
+Finished: 	Sat Dec 23 14:28:48 MSK 2017
+Elapsed: 	12mins, 0sec
+Diagnostics:
+Average Map Time 	59sec
+Average Shuffle Time 	12sec
+Average Merge Time 	4sec
+Average Reduce Time 	4mins, 5sec
+
+r20
+CS: 10256
+Job Name: 	streamjob1707386085581250647.jar
+User Name: 	pdc
+Queue: 	root.pdc
+State: 	SUCCEEDED
+Uberized: 	false
+Submitted: 	Sat Dec 23 14:11:31 MSK 2017
+Started: 	Sat Dec 23 14:16:46 MSK 2017
+Finished: 	Sat Dec 23 14:26:18 MSK 2017
+Elapsed: 	9mins, 31sec
+Diagnostics:
+Average Map Time 	58sec
+Average Shuffle Time 	10sec
+Average Merge Time 	3sec
+Average Reduce Time 	3mins, 1sec
+
+r25
+CS: 10283
+Job Name: 	streamjob8660823592219652933.jar
+User Name: 	pdc
+Queue: 	root.pdc
+State: 	SUCCEEDED
+Uberized: 	false
+Submitted: 	Sat Dec 23 14:11:15 MSK 2017
+Started: 	Sat Dec 23 14:16:48 MSK 2017
+Finished: 	Sat Dec 23 14:23:59 MSK 2017
+Elapsed: 	7mins, 11sec
+Diagnostics:
+Average Map Time 	1mins, 0sec
+Average Shuffle Time 	9sec
+Average Merge Time 	3sec
+Average Reduce Time 	2mins, 30sec
+
+r30
+CS: 9974
+Job Name: 	streamjob604483545048275444.jar
+User Name: 	pdc
+Queue: 	root.pdc
+State: 	SUCCEEDED
+Uberized: 	false
+Submitted: 	Sat Dec 23 14:10:59 MSK 2017
+Started: 	Sat Dec 23 14:16:46 MSK 2017
+Finished: 	Sat Dec 23 14:21:56 MSK 2017
+Elapsed: 	5mins, 10sec
+Diagnostics:
+Average Map Time 	1mins, 0sec
+Average Shuffle Time 	13sec
+Average Merge Time 	2sec
+Average Reduce Time 	1mins, 53sec
+
+r35
+CS: 10379
+Job Name: 	streamjob5409858207002986351.jar
+User Name: 	pdc
+Queue: 	root.pdc
+State: 	SUCCEEDED
+Uberized: 	false
+Submitted: 	Sat Dec 23 14:10:46 MSK 2017
+Started: 	Sat Dec 23 14:11:27 MSK 2017
+Finished: 	Sat Dec 23 14:16:54 MSK 2017
+Elapsed: 	5mins, 27sec
+Diagnostics:
+Average Map Time 	1mins, 1sec
+Average Shuffle Time 	6sec
+Average Merge Time 	2sec
+Average Reduce Time 	1mins, 51sec
+
+r40
+CS: 10175
+Job Name: 	streamjob929106567352871996.jar
+User Name: 	pdc
+Queue: 	root.pdc
+State: 	SUCCEEDED
+Uberized: 	false
+Submitted: 	Sat Dec 23 14:10:32 MSK 2017
+Started: 	Sat Dec 23 14:10:36 MSK 2017
+Finished: 	Sat Dec 23 14:15:08 MSK 2017
+Elapsed: 	4mins, 32sec
+Diagnostics:
+Average Map Time 	1mins, 2sec
+Average Shuffle Time 	4sec
+Average Merge Time 	1sec
+Average Reduce Time 	1mins, 33sec
+
+r45
+CS: 9935
+Job Name: 	streamjob6585207406568629648.jar
+User Name: 	pdc
+Queue: 	root.pdc
+State: 	SUCCEEDED
+Uberized: 	false
+Submitted: 	Sat Dec 23 14:10:17 MSK 2017
+Started: 	Sat Dec 23 14:10:21 MSK 2017
+Finished: 	Sat Dec 23 14:13:58 MSK 2017
+Elapsed: 	3mins, 36sec
+Diagnostics:
+Average Map Time 	1mins, 1sec
+Average Shuffle Time 	5sec
+Average Merge Time 	1sec
+Average Reduce Time 	1mins, 20sec
+
+r50
+CS: 9395
+Job Name: 	streamjob1772440870950263356.jar
+User Name: 	pdc
+Queue: 	root.pdc
+State: 	SUCCEEDED
+Uberized: 	false
+Submitted: 	Sat Dec 23 14:06:18 MSK 2017
+Started: 	Sat Dec 23 14:06:22 MSK 2017
+Finished: 	Sat Dec 23 14:08:53 MSK 2017
+Elapsed: 	2mins, 31sec
+Diagnostics:
+Average Map Time 	56sec
+Average Shuffle Time 	5sec
+Average Merge Time 	1sec
+Average Reduce Time 	1mins, 10sec
+
+
+
+
+
+
+
+
+
+check https://everest.distcomp.org/jobs/5a3e2d8c150000d505eb5f58
+en 9586 https://everest.distcomp.org/jobs/5a3e2ca61500001700eb5f43
+
+Job Name: 	streamjob8064237788401212221.jar
+User Name: 	pdc
+Queue: 	root.pdc
+State: 	SUCCEEDED
+Uberized: 	false
+Submitted: 	Sat Dec 23 13:11:51 MSK 2017
+Started: 	Sat Dec 23 13:12:33 MSK 2017
+Finished: 	Sat Dec 23 13:14:21 MSK 2017
+Elapsed: 	1mins, 47sec
+Diagnostics:
+Average Map Time 	44sec
+Average Shuffle Time 	4sec
+Average Merge Time 	0sec
+Average Reduce Time 	31sec
+
+ru 3010 https://everest.distcomp.org/jobs/5a3e2be21500001500eb5f36
+
+Job Name: 	streamjob3781377487209037142.jar
+User Name: 	pdc
+Queue: 	root.pdc
+State: 	SUCCEEDED
+Uberized: 	false
+Submitted: 	Sat Dec 23 13:15:07 MSK 2017
+Started: 	Sat Dec 23 13:15:10 MSK 2017
+Finished: 	Sat Dec 23 13:18:21 MSK 2017
+Elapsed: 	3mins, 10sec
+Diagnostics:
+Average Map Time 	1mins, 0sec
+Average Shuffle Time 	6sec
+Average Merge Time 	1sec
+Average Reduce Time 	1mins, 36sec
+
+en special https://everest.distcomp.org/jobs/5a3e39ea150000f00ceb605e?jobId=5a3e38a5150000f00ceb6036

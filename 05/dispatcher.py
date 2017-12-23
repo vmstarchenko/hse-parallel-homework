@@ -50,7 +50,8 @@ class DispatcherQueue(object):
             return
 
         cur_item = processeditems.setdefault(item.itemId, item)
-        if item is cur_item: # set item as new processed item
+        # set item as new processed item
+        if item.processedBy is cur_item.processedBy:
             clientqueue.put(item)
 
         self.activeworks.pop(worker, None)
@@ -97,7 +98,7 @@ class DispatcherQueue(object):
                         self.putWork(self.activeworks[worker])
 
                     self.lock.acquire()
-                    if time() - timestemp:
+                    if time() - timestemp > HEARTBEAT_MAX_DELAY:
                         self.activeworks.pop(worker, None)
                         self.heartbeats.pop(worker, None)
                     self.lock.release()
